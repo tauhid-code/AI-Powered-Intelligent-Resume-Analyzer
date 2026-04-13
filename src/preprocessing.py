@@ -27,8 +27,7 @@ def load_stopwords() -> set[str]:
             logger.info("NLTK stopwords corpus not found. Downloading now...")
             nltk.download("stopwords",quiet=True)
             words = set(stopwords.words("english"))
-
-            return words
+        return words
 
     except ImportError:
         logger.warning("NLTK library is not installed. Please install it using 'pip install nltk' to use stopword filtering.")
@@ -75,7 +74,7 @@ def normalize_whitespace(text: str)-> str:
 
     return re.sub(r"\s+", " ", text).strip()
 
-def process_text(text: str)-> str:
+def preprocess_text(text: str, remove_stops: bool = True) -> str:
     """
     Run full preprocessing pipeline on the full input text."""
 

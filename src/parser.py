@@ -8,6 +8,8 @@ import os
 import logging 
 from pathlib import Path 
 from typing import Optional 
+import pdfplumber
+import fitz
 
 
 logger = logging.getLogger(__name__)
