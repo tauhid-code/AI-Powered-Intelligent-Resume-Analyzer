@@ -1,10 +1,20 @@
 import datetime
+import re
 import streamlit as st
 import sys, os
 from pathlib import Path
 _FRONTEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 _PROJECT_ROOT = os.path.dirname(_FRONTEND_DIR)
-_RESUME_DIR   = os.path.join(_PROJECT_ROOT, "uploads", "resumes")
+
+# _RESUME_DIR is now per-user — resolved at runtime using the logged-in email.
+# e.g. uploads/resumes/john_example_com/
+def _get_resume_dir() -> str:
+    email = st.session_state.get("user_email") or "anonymous"
+    safe  = re.sub(r"[^\w]", "_", email.lower())   # sanitize for folder name
+    path  = os.path.join(_PROJECT_ROOT, "uploads", "resumes", safe)
+    os.makedirs(path, exist_ok=True)
+    return path
+
 for _p in (_PROJECT_ROOT, _FRONTEND_DIR):
     if _p not in sys.path:
         sys.path.insert(0, _p)
@@ -264,12 +274,12 @@ hr { border-color: rgba(255,255,255,0.06) !important; }
 
 
 def _load_stored_resumes() -> None:
-    """Scan _RESUME_DIR and populate session_state["stored_resumes"] on first load."""
+    """Scan the current user's resume folder and populate session_state["stored_resumes"]."""
     if "stored_resumes" in st.session_state:
         return
-    os.makedirs(_RESUME_DIR, exist_ok=True)
+    resume_dir = _get_resume_dir()
     resumes = []
-    for f in sorted(Path(_RESUME_DIR).glob("*.pdf"), key=lambda p: p.stat().st_mtime, reverse=True):
+    for f in sorted(Path(resume_dir).glob("*.pdf"), key=lambda p: p.stat().st_mtime, reverse=True):
         stat = f.stat()
         resumes.append({
             "name":     f.name,
@@ -281,9 +291,9 @@ def _load_stored_resumes() -> None:
 
 
 def _save_resume_to_disk(uploaded_file) -> dict:
-    """Persist an UploadedFile to _RESUME_DIR and refresh stored_resumes."""
-    os.makedirs(_RESUME_DIR, exist_ok=True)
-    dest = os.path.join(_RESUME_DIR, uploaded_file.name)
+    """Persist an UploadedFile to the current user's resume folder."""
+    resume_dir = _get_resume_dir()
+    dest = os.path.join(resume_dir, uploaded_file.name)
     buf  = uploaded_file.getbuffer()
     with open(dest, "wb") as fh:
         fh.write(buf)
@@ -1036,8 +1046,8 @@ def _run_real_analysis(
             resume_name = resume_name or Path(file_path).name
         else:
         
-            os.makedirs(_RESUME_DIR, exist_ok=True)
-            tmp_path = os.path.join(_RESUME_DIR, f"_tmp_{uploaded_file.name}")
+            resume_dir = _get_resume_dir()
+            tmp_path = os.path.join(resume_dir, f"_tmp_{uploaded_file.name}")
             try:
                 with open(tmp_path, "wb") as fh:
                     fh.write(uploaded_file.getbuffer())

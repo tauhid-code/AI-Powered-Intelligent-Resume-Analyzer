@@ -309,9 +309,13 @@ def render_sidebar() -> str:
 
         st.markdown('<div class="logout-marker"></div>', unsafe_allow_html=True)
         if st.button("  Log Out", key="nav_logout", use_container_width=True):
+            # Clear auth
             for _k in ("jwt_token", "user_name", "user_email"):
                 st.session_state[_k] = None
-            st.session_state["active_page"] = "dashboard"
+            # Clear all user-specific data so next user starts fresh
+            for _k in ("stored_resumes", "analysis_history", "selected_resume",
+                       "interview_result", "active_page"):
+                st.session_state.pop(_k, None)
             st.switch_page("app.py")
 
     return active

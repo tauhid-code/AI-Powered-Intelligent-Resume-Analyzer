@@ -322,6 +322,10 @@ if st.session_state.auth_mode == "login":
                     resp = api_login(email.strip().lower(), password)
                     if resp.status_code == 200:
                         data = resp.json()
+                        # Clear any previous user's data before setting new session
+                        for _k in ("stored_resumes", "analysis_history",
+                                   "selected_resume", "interview_result", "active_page"):
+                            st.session_state.pop(_k, None)
                         st.session_state.jwt_token  = data["access_token"]
                         st.session_state.user_name  = data["name"]
                         st.session_state.user_email = data["email"]
