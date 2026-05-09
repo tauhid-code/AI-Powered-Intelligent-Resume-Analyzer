@@ -5,7 +5,7 @@ import sqlite3
 from contextlib import contextmanager
 from pathlib import Path
 
-# Read from .env / environment; fall back to a local file
+
 DB_PATH = os.getenv("DB_PATH", str(Path(__file__).parent.parent / "data" / "hirelytics.db"))
 
 

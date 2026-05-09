@@ -19,5 +19,5 @@ def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    return payload  # contains sub (email), name, id
+    return payload 
 

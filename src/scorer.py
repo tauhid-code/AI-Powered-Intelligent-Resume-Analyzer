@@ -25,8 +25,8 @@ logger = logging.getLogger(__name__)
 
 ##scoring weights 
 WEIGHT_KEYWORD: float = 0.50
-WEIGHT_SEMANTIC: float = 0.30
-WEIGHT_SECTION: float = 0.20
+WEIGHT_SEMANTIC: float = 0.25
+WEIGHT_SECTION: float = 0.25
 
 ##Scored Sections 
 SCORED_SECTIONS : list[str]= ['skills', 'experience', 'projects']
@@ -60,7 +60,6 @@ def load_embedding_model():
     return _embedding_model
 
 
-## SUB_SCORERS 
 def compute_keyword_score(resume_text: str, jd_text: str) -> float:
     resume_data = extract_skills(resume_text)
     jd_data = extract_skills(jd_text)
@@ -88,7 +87,6 @@ def compute_semantic_score(resume_text: str, jd_text: str) -> float:
     """
     model = load_embedding_model()
 
-    # Truncate to stay within the model's token window
     embeddings = model.encode(
         [resume_text[:3000], jd_text[:3000]],
         convert_to_numpy=True,
@@ -119,7 +117,6 @@ def compute_section_score(resume_text: str) -> tuple[float, dict[str, bool]]:
     )
     return score, all_sections
 
-##--------Main pipeline function-----------
 
 def compute_ats_score(
     resume_text: str,

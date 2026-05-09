@@ -10,7 +10,7 @@ from typing import NamedTuple, Optional
 from rapidfuzz import fuzz
 logger = logging.getLogger(__name__)
 
-## Skill Taxonomy --- 200+ skills across 13 categories 
+## Skill Taxonomy - 200+ skills across 13 categories 
 
 
 SKILL_TAXONOMY: dict[str, list[str]] = {
@@ -110,7 +110,7 @@ SKILL_PATTERN: re.Pattern = re.compile(
     re.IGNORECASE,
 )
 
-## RESULT TYPE
+
 
 class SkillExtractionResult(NamedTuple):
     skills : list[str]
@@ -118,7 +118,6 @@ class SkillExtractionResult(NamedTuple):
     categories : dict[str,list[str]]
 
 
-## PUBLIC FUNCTION 
 
 def extract_skills(text: str) -> SkillExtractionResult:
     """
@@ -132,7 +131,6 @@ def extract_skills(text: str) -> SkillExtractionResult:
     lowered = text.lower()
     raw_matches = SKILL_PATTERN.findall(lowered)
 
-    # Deduplicate while preserving first-occurrence order
     seen: set[str] = set()
     ordered_skills: list[str] = []
     for match in raw_matches:
@@ -141,7 +139,6 @@ def extract_skills(text: str) -> SkillExtractionResult:
             seen.add(normalized)
             ordered_skills.append(normalized)
 
-    # Group by category
     categories: dict[str, list[str]] = {}
     for skill in ordered_skills:
         cat = SKILL_TO_CATEGORY.get(skill, "other")

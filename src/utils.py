@@ -10,7 +10,6 @@ from typing import Optional
 
 import numpy as np 
 
-## Logging setup 
 
 def set_logging( level: int = logging.INFO) -> None:
     logging.basicConfig(
@@ -19,8 +18,7 @@ def set_logging( level: int = logging.INFO) -> None:
         format="%(asctime)s | %(levelname)-8s | %(name)s | %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S"
     )
-
-## Cosine similarity 
+ 
 def cosine_similarity_numpy(vec_a: np.ndarray, vec_b: np.ndarray) -> float:
     norm_a = np.linalg.norm(vec_a)
     norm_b = np.linalg.norm(vec_b)

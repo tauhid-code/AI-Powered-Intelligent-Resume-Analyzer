@@ -7,29 +7,17 @@ load_dotenv()
 
 API_BASE = os.getenv("API_BASE_URL", "http://localhost:8000")
 
-# Page config
+
 st.set_page_config(
     page_title="Hirelytics AI — Sign In",
-    page_icon="🎯",
     layout="centered",
     initial_sidebar_state="collapsed",
 )
-
-# CSS styles for the login/signup page
-
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap');
 
-[data-testid="stAppViewContainer"] > .main {
-    background: #071424;
-    background-image:
-        radial-gradient(ellipse 80% 60% at 20% 0%,  rgba(15,61,94,0.55)  0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 80% 100%, rgba(58,124,165,0.3) 0%, transparent 60%);
-    min-height: 100vh;
-    font-family: 'DM Sans', sans-serif;
-}
-
+/* ── Hide Streamlit chrome───── */
 [data-testid="stHeader"],
 [data-testid="stToolbar"],
 [data-testid="stDecoration"],
@@ -39,168 +27,170 @@ section[data-testid="stSidebar"] {
     display: none !important;
 }
 
+/* ── Page background─── */
+.stApp, [data-testid="stAppViewContainer"] {
+    background: #0e1117 !important;
+}
+[data-testid="stAppViewBlockContainer"],
 .block-container {
-    padding-top: 4rem !important;
-    padding-bottom: 4rem !important;
-    max-width: 860px !important;
-    min-width: 720px !important;
-    width: 860px !important;
-}
-
-[data-testid="stVerticalBlockBorderWrapper"] {
     background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
+    padding-top: 3.5rem !important;
+    max-width: 480px !important;
 }
 
-.card-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 2.6rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    background: linear-gradient(90deg, #d6eeff 0%, #81a4cd 55%, #3a7ca5 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-align: center;
-    margin: 0 0 0.4rem;
-    line-height: 1.2;
-}
-.card-sub {
-    text-align: center;
-    color: rgba(255,255,255,0.35);
-    font-size: 1rem;
-    letter-spacing: 0.2px;
-    margin-bottom: 2.2rem;
+/* ── Global font─── */
+.stApp * {
+    font-family: 'DM Sans', sans-serif !important;
+    color: rgba(255,255,255,0.85) !important;
 }
 
-.social-row {
-    display: flex;
-    gap: 10px;
-    margin: 1rem 0 0;
-}
-.social-btn {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background: rgba(255,255,255,0.055);
-    border: 1px solid rgba(255,255,255,0.11);
-    border-radius: 11px;
-    padding: 0.9rem 0.5rem;
-    color: rgba(255,255,255,0.65);
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
+/* ── Divider────── */
+hr {
+    border-color: rgba(255,255,255,0.08) !important;
 }
 
-.or-divider {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 1rem 0;
-}
-.or-line  { flex: 1; height: 1px; background: rgba(255,255,255,0.09); }
-.or-label { color: rgba(255,255,255,0.25); font-size: 0.7rem; letter-spacing: 0.7px; white-space: nowrap; }
-
-.stButton > button {
-    background: transparent !important;
-    border: 1px solid rgba(255,255,255,0.13) !important;
-    color: rgba(255,255,255,0.5) !important;
-    border-radius: 10px !important;
-    font-weight: 600 !important;
-    font-size: 1rem !important;
-    padding: 0.6rem !important;
-    transition: all 0.2s !important;
-}
-.stButton > button:hover {
-    background: rgba(58,124,165,0.12) !important;
-    border-color: rgba(58,124,165,0.4) !important;
-    color: #fff !important;
-}
-
-.stTextInput label {
+/* ── Text inputs — label─── */
+[data-testid="stTextInput"] label,
+[data-testid="stTextInput"] p {
     color: rgba(255,255,255,0.55) !important;
-    font-size: 0.82rem !important;
+    font-size: 0.8rem !important;
     font-weight: 600 !important;
-    letter-spacing: 0.7px !important;
+    letter-spacing: 0.04em !important;
     text-transform: uppercase !important;
 }
+/* Text inputs — field */
+[data-testid="stTextInput"] input {
+    background:    #1F1F1F !important;
+    border:        1px solid rgba(255,255,255,0.10) !important;
+    border-radius: 10px !important;
+    color:         #ffffff !important;
+    font-size:     0.9rem !important;
+    padding:       0.55rem 0.9rem !important;
+    transition:    border-color 0.2s, box-shadow 0.2s !important;
+}
+[data-testid="stTextInput"] input:focus {
+    border-color: #FA4B4C !important;
+    box-shadow:   0 0 0 3px rgba(250,75,76,0.20) !important;
+    outline:      none !important;
+}
+[data-testid="stTextInput"] input::placeholder {
+    color: rgba(255,255,255,0.25) !important;
+}
+/* Input wrapper divs — kill any white background */
+[data-testid="stTextInput"] > div,
+[data-testid="stTextInput"] > div > div {
+    background: #1F1F1F !important;
+    border-radius: 10px !important;
+}
+/* Eye icon button — match input background exactly */
+[data-testid="stTextInput"] button,
+[data-testid="stTextInput"] button > div,
+[data-testid="stTextInput"] button svg {
+    background:    #1F1F1F !important;
+    border:        none !important;
+    border-radius: 0 10px 10px 0 !important;
+    color:         rgba(255,255,255,0.40) !important;
+    fill:          rgba(255,255,255,0.40) !important;
+}
+[data-testid="stTextInput"] button:hover,
+[data-testid="stTextInput"] button:hover svg {
+    background: #1F1F1F !important;
+    color:      rgba(255,255,255,0.80) !important;
+    fill:       rgba(255,255,255,0.80) !important;
+}
 
-.stTextInput > div > div {
-    background: rgba(255,255,255,0.06) !important;
-    border: 1px solid rgba(255,255,255,0.12) !important;
-    border-radius: 11px !important;
-    transition: all 0.2s !important;
-}
-.stTextInput > div > div:focus-within {
-    border-color: #3a7ca5 !important;
-    box-shadow: 0 0 0 3px rgba(58,124,165,0.2) !important;
-    background: rgba(255,255,255,0.09) !important;
-}
-.stTextInput > div > div > input {
-    color: #fff !important;
-    font-size: 1.05rem !important;
-    padding: 0.95rem 1.2rem !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    caret-color: #81a4cd !important;
-}
-.stTextInput > div > div > input::placeholder {
-    color: rgba(255,255,255,0.2) !important;
+/* ── All buttons — base─ */
+.stButton > button {
+    border-radius:  10px !important;
+    font-family:    'DM Sans', sans-serif !important;
+    font-size:      0.875rem !important;
+    font-weight:    600 !important;
+    transition:     all 0.18s ease !important;
+    padding:        0.6rem 1.2rem !important;
+    letter-spacing: 0.01em !important;
 }
 
-.stCheckbox label { color: rgba(255,255,255,0.5) !important; font-size: 0.82rem !important; }
-
-div[data-testid="stFormSubmitButton"] > button {
-    width: 100% !important;
-    background: linear-gradient(135deg, #0f3d5e 0%, #3a7ca5 100%) !important;
-    color: #fff !important;
-    border: none !important;
-    border-radius: 12px !important;
-    padding: 1.05rem 1.5rem !important;
-    font-size: 1.12rem !important;
-    font-weight: 700 !important;
-    margin-top: 0.7rem !important;
-    box-shadow: 0 6px 22px rgba(15,61,94,0.5) !important;
-    transition: all 0.2s ease !important;
+/* Primary buttons */
+.stButton > button[kind="primary"] {
+    background: #FA4B4C !important;
+    border:     none !important;
+    color:      #ffffff !important;
+    box-shadow: 0 4px 14px rgba(250,75,76,0.35) !important;
 }
-div[data-testid="stFormSubmitButton"] > button:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 10px 28px rgba(58,124,165,0.55) !important;
-    background: linear-gradient(135deg, #1a5276 0%, #4a90c4 100%) !important;
+.stButton > button[kind="primary"]:hover {
+    background: #e03e3f !important;
+    box-shadow: 0 6px 20px rgba(250,75,76,0.50) !important;
+    transform:  translateY(-1px) !important;
 }
-div[data-testid="stFormSubmitButton"] > button:active {
+.stButton > button[kind="primary"]:active {
     transform: translateY(0) !important;
 }
 
-.strength-wrap { display:flex; align-items:center; gap:8px; margin: 4px 0 8px; }
-.strength-track { flex:1; height:3px; border-radius:3px; background:rgba(255,255,255,0.09); overflow:hidden; }
-.strength-fill  { height:100%; border-radius:3px; transition: width .35s, background .35s; }
-.strength-label { font-size:0.7rem; min-width:44px; text-align:right; }
-
-.footer-note {
-    text-align: center;
-    color: rgba(255,255,255,0.3);
-    font-size: 0.8rem;
-    margin-top: 1.2rem;
+/* Secondary buttons */
+.stButton > button[kind="secondary"] {
+    background:  rgba(255,255,255,0.04) !important;
+    border:      1px solid rgba(255,255,255,0.12) !important;
+    color:       rgba(255,255,255,0.65) !important;
 }
-.footer-note span { color: #81a4cd; font-weight: 600; cursor: pointer; }
-.footer-note span:hover { color: #cde8ff; }
+.stButton > button[kind="secondary"]:hover {
+    background:   rgba(250,75,76,0.08) !important;
+    border-color: rgba(250,75,76,0.45) !important;
+    color:        #ffffff !important;
+}
 
-.stAlert { border-radius: 11px !important; font-size: 0.87rem !important; }
+/* Form submit button */
+[data-testid="stForm"] [data-testid="stFormSubmitButton"] > button {
+    background:    #FA4B4C !important;
+    border:        none !important;
+    color:         #ffffff !important;
+    font-size:     0.92rem !important;
+    font-weight:   700 !important;
+    border-radius: 10px !important;
+    padding:       0.7rem 1.2rem !important;
+    box-shadow:    0 4px 14px rgba(250,75,76,0.35) !important;
+    transition:    all 0.18s ease !important;
+    width:         100% !important;
+}
+[data-testid="stForm"] [data-testid="stFormSubmitButton"] > button:hover {
+    background: #e03e3f !important;
+    box-shadow: 0 6px 20px rgba(250,75,76,0.50) !important;
+    transform:  translateY(-1px) !important;
+}
 
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-thumb { background: rgba(58,124,165,0.35); border-radius: 4px; }
+/* ── Form container── */
+[data-testid="stForm"] {
+    background:    rgba(255,255,255,0.03) !important;
+    border:        1px solid rgba(255,255,255,0.08) !important;
+    border-radius: 14px !important;
+    padding:       1.4rem 1.6rem !important;
+}
+
+/* ── Checkbox ─── */
+[data-testid="stCheckbox"] label span {
+    color: rgba(255,255,255,0.55) !important;
+    font-size: 0.82rem !important;
+}
+[data-testid="stCheckbox"] input:checked + div {
+    background:   #FA4B4C !important;
+    border-color: #FA4B4C !important;
+}
+
+/* ── Caption / small text ──── */
+.stApp [data-testid="stCaptionContainer"] p,
+.stApp small,
+.stApp .stCaption p {
+    color:     rgba(255,255,255,0.30) !important;
+    font-size: 0.78rem !important;
+}
+
+/* ── Alert boxes─── */
+[data-testid="stAlert"] {
+    background:    rgba(255,255,255,0.04) !important;
+    border-radius: 10px !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
-
-# Session state defaults
 
 _defaults = {
     "auth_mode":  "login",
@@ -212,10 +202,10 @@ for k, v in _defaults.items():
     st.session_state.setdefault(k, v)
 
 if st.session_state.jwt_token:
-    st.switch_page("pages/app.py")
+    st.switch_page("pages/home.py")
 
 
-
+# ── API helpers ──
 def api_login(email: str, password: str) -> requests.Response:
     return requests.post(
         f"{API_BASE}/auth/login",
@@ -243,74 +233,89 @@ def password_strength(pw: str) -> tuple:
     return score, "Strong", "#22c55e"
 
 
+# ── Header and description ──
 st.markdown("""
-<div class="card-title">Hirelytics AI</div>
-<div class="card-sub">Smarter hiring, powered by artificial intelligence</div>
+<div style="text-align:center; margin-bottom:1rem;">
+    <div style="
+        font-family:'Syne',sans-serif;
+        font-size:2rem;
+        font-weight:800;
+        color:#ffffff;
+        letter-spacing:-0.5px;
+        line-height:1.1;
+        margin-bottom:6px;
+    ">Hirelytics AI</div>
+    <div style="color:rgba(255,255,255,0.35);font-size:0.9rem;letter-spacing:0.02em;">
+        Smarter hiring, powered by artificial intelligence
+    </div>
+</div>
 """, unsafe_allow_html=True)
 
-# Tab toggle
-col_a, col_b = st.columns(2)
-with col_a:
-    if st.button("Sign In", key="tab_login", use_container_width=True):
+st.markdown("<hr style='border-color:rgba(255,255,255,0.07);margin-bottom:1.4rem'>",
+            unsafe_allow_html=True)
+
+
+# ── Google login button ───
+google_clicked = st.button(
+    "  Continue with Google",
+    use_container_width=True,
+    key="btn_google",
+    type="secondary",
+)
+if google_clicked:
+    st.info(" Google OAuth is not connected yet. Use email/password login below.")
+
+st.markdown("<div style='height:6px'></div>", unsafe_allow_html=True)
+
+# ── OR divider ──
+st.markdown("""
+<div style="display:flex;align-items:center;gap:10px;margin:4px 0 12px">
+    <div style="flex:1;height:1px;background:rgba(255,255,255,0.08)"></div>
+    <span style="color:rgba(255,255,255,0.25);font-size:0.72rem;letter-spacing:0.12em;font-weight:600;">
+        OR CONTINUE WITH EMAIL
+    </span>
+    <div style="flex:1;height:1px;background:rgba(255,255,255,0.08)"></div>
+</div>
+""", unsafe_allow_html=True)
+
+
+# ── Sign In / Sign Up tab switcher ───
+tab_a, tab_b = st.columns(2)
+with tab_a:
+    if st.button(
+        "Sign In",
+        key="tab_login",
+        use_container_width=True,
+        type="primary" if st.session_state.auth_mode == "login" else "secondary",
+    ):
         st.session_state.auth_mode = "login"
         st.rerun()
-with col_b:
-    if st.button("Sign Up", key="tab_signup", use_container_width=True):
+
+with tab_b:
+    if st.button(
+        "Sign Up",
+        key="tab_signup",
+        use_container_width=True,
+        type="primary" if st.session_state.auth_mode == "signup" else "secondary",
+    ):
         st.session_state.auth_mode = "signup"
         st.rerun()
 
-# Active tab highlight
-nth = 1 if st.session_state.auth_mode == "login" else 2
-st.markdown(f"""
-<style>
-div[data-testid="column"]:nth-child({nth}) .stButton > button {{
-    background: linear-gradient(135deg,#0f3d5e,#3a7ca5) !important;
-    color: #fff !important;
-    border-color: transparent !important;
-    box-shadow: 0 4px 16px rgba(15,61,94,.4) !important;
-}}
-</style>""", unsafe_allow_html=True)
-
-st.markdown("""
-<div class="social-row">
-    <div class="social-btn">
-        <svg width="14" height="14" viewBox="0 0 48 48">
-            <path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.5 33.9 30 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6-6C34.6 5.1 29.6 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21c10.5 0 20-7.5 20-21 0-1.4-.1-2.7-.5-4z"/>
-        </svg>
-        Google
-    </div>
-    <div class="social-btn">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-        </svg>
-        GitHub
-    </div>
-</div>
-<div class="or-divider">
-    <div class="or-line"></div>
-    <span class="or-label">OR CONTINUE WITH EMAIL</span>
-    <div class="or-line"></div>
-</div>
-""", unsafe_allow_html=True)
+st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
 
 
-# LOGIN FORM
-
+# ── LOGIN FORM ────
 if st.session_state.auth_mode == "login":
 
     with st.form("login_form", clear_on_submit=False):
         email    = st.text_input("Email Address", placeholder="you@company.com",     key="li_email")
         password = st.text_input("Password",      placeholder="Enter your password", key="li_pw", type="password")
-        st.markdown(
-            '<p style="font-size:0.76rem;color:rgba(255,255,255,0.28);margin:2px 0 6px;">'
-            'Forgot password? <span style="color:#81a4cd;cursor:pointer;">Reset it</span></p>',
-            unsafe_allow_html=True,
-        )
-        submitted = st.form_submit_button("Sign In  →", use_container_width=True)
+        st.caption("Forgot password? Contact support to reset it.")
+        submitted = st.form_submit_button("Sign In  →", use_container_width=True, type="primary")
 
     if submitted:
         if not email.strip() or not password:
-            st.error("⚠️  Please enter both your email and password.")
+            st.error(" Please enter both your email and password.")
         else:
             with st.spinner("Verifying credentials…"):
                 try:
@@ -320,26 +325,25 @@ if st.session_state.auth_mode == "login":
                         st.session_state.jwt_token  = data["access_token"]
                         st.session_state.user_name  = data["name"]
                         st.session_state.user_email = data["email"]
-                        st.success(f"✅  Welcome back, **{data['name']}**! Loading your dashboard…")
-                        st.switch_page("pages/app.py")
-                        st.rerun()
+                        st.success(f"  Welcome back, **{data['name']}**! Loading your dashboard…")
+                        st.switch_page("pages/home.py")
                     elif resp.status_code == 401:
-                        st.error("❌  Incorrect email or password.")
+                        st.error("  Incorrect email or password.")
                     else:
-                        st.error(f"❌  {resp.json().get('detail', 'Login failed.')}")
+                        st.error(f"  {resp.json().get('detail', 'Login failed.')}")
                 except requests.exceptions.ConnectionError:
-                    st.error("🔌  API server unreachable. Ensure FastAPI is running on port 8000.")
+                    st.error("  API server unreachable. Make sure FastAPI is running on port 8000.")
                 except Exception as e:
                     st.error(f"Unexpected error: {e}")
 
     st.markdown(
-        '<div class="footer-note">No account yet? '
-        '<span onclick="void(0)">Use the Sign Up tab above →</span></div>',
+        "<p style='text-align:center;color:rgba(255,255,255,0.28);font-size:0.8rem;margin-top:10px'>"
+        "No account yet? Use the <b style='color:#FA4B4C'>Sign Up</b> tab above →</p>",
         unsafe_allow_html=True,
     )
 
-# SIGNUP FORM
 
+# ── SIGNUP FORM ────
 else:
 
     with st.form("signup_form", clear_on_submit=False):
@@ -351,15 +355,16 @@ else:
         if pw:
             pct, label, colour = password_strength(pw)
             st.markdown(f"""
-            <div class="strength-wrap">
-                <div class="strength-track">
-                    <div class="strength-fill" style="width:{pct}%;background:{colour};"></div>
+            <div style="display:flex;align-items:center;gap:8px;margin:2px 0 8px">
+                <div style="flex:1;height:4px;border-radius:3px;background:rgba(255,255,255,0.10);overflow:hidden">
+                    <div style="width:{pct}%;height:100%;background:{colour};border-radius:3px;
+                                transition:width .35s,background .35s"></div>
                 </div>
-                <span class="strength-label" style="color:{colour};">{label}</span>
+                <span style="font-size:0.75rem;color:{colour};font-weight:600">{label}</span>
             </div>""", unsafe_allow_html=True)
 
         agreed    = st.checkbox("I agree to the Terms of Service and Privacy Policy", key="su_terms")
-        submitted = st.form_submit_button("Create Account  →", use_container_width=True)
+        submitted = st.form_submit_button("Create Account  →", use_container_width=True, type="primary")
 
     if submitted:
         errs = []
@@ -371,35 +376,42 @@ else:
 
         if errs:
             for e in errs:
-                st.error(f"⚠️  {e}")
+                st.error(f"  {e}")
         else:
             with st.spinner("Creating your account…"):
                 try:
                     resp = api_signup(name.strip(), email.strip().lower(), pw)
                     if resp.status_code == 201:
-                        st.success("🎉  Account created! Tap **Sign In** to log in.")
+                        st.success(" Account created! Tap **Sign In** to log in.")
                         st.session_state.auth_mode = "login"
                         st.rerun()
                     elif resp.status_code == 409:
-                        st.error("❌  An account with that email already exists.")
+                        st.error("  An account with that email already exists.")
                     else:
-                        st.error(f"❌  {resp.json().get('detail', 'Signup failed.')}")
+                        st.error(f"  {resp.json().get('detail', 'Signup failed.')}")
                 except requests.exceptions.ConnectionError:
-                    st.error("🔌  API server unreachable. Ensure FastAPI is running on port 8000.")
+                    st.error("🔌  API server unreachable. Make sure FastAPI is running on port 8000.")
                 except Exception as e:
                     st.error(f"Unexpected error: {e}")
 
     st.markdown(
-        '<div class="footer-note">Already have an account? '
-        '<span onclick="void(0)">Use the Sign In tab above →</span></div>',
+        "<p style='text-align:center;color:rgba(255,255,255,0.28);font-size:0.8rem;margin-top:10px'>"
+        "Already have an account? Use the <b style='color:#FA4B4C'>Sign In</b> tab above →</p>",
         unsafe_allow_html=True,
     )
 
-##Copyright note
 
+# ── Footer ────
 st.markdown("""
-<p style="text-align:center;color:rgba(255,255,255,0.15);font-size:0.68rem;
-   margin-top:1.5rem;letter-spacing:0.4px;">
-   © 2025 Hirelytics AI &nbsp;·&nbsp; Secured with JWT &amp; bcrypt
-</p>
+<div style="
+    text-align:center;
+    margin-top:2rem;
+    padding-top:1.2rem;
+    border-top:1px solid rgba(255,255,255,0.07);
+    color:rgba(255,255,255,0.20);
+    font-size:0.75rem;
+    letter-spacing:0.03em;
+">
+    © 2025 Hirelytics AI &nbsp;·&nbsp; Secured with JWT &amp; bcrypt
+</div>
 """, unsafe_allow_html=True)

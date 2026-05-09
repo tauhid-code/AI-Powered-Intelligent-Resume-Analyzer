@@ -9,7 +9,6 @@ from typing import Optional
 
 logger = logging.getLogger(__name__)
 
-## to preserve words meaning, so that they are not changed while applying stop words.
 
 _KEEP_WORDS = {"not", "no", "c", "r"}
 
